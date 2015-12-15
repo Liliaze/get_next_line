@@ -1,0 +1,10 @@
+1/ first ligne /1
+2/ la ligne avant ligne vide /2
+
+3/Ce matin un lapin /3
+4- a tue un chasseur
+5- il courait dans les hautes herbes
+6- mais il s'est fait rattrape par get_next_line;
+
+7/ ligne apres ligne vide /7
+end/ last ligne /end
