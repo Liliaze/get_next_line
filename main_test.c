@@ -6,12 +6,13 @@
 /*   By: dboudy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/15 11:18:10 by dboudy            #+#    #+#             */
-/*   Updated: 2015/12/15 13:50:50 by dboudy           ###   ########.fr       */
+/*   Updated: 2015/12/15 15:14:08 by dboudy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+void	ft_putnbr(int i);
 
 int		main(int ac, char **av)
 {
@@ -26,9 +27,7 @@ int		main(int ac, char **av)
 		return (0);
 	}
 	tab[0] = get_next_line(fd, retour);
-	tab[1] = get_next_line(fd, retour);
-	tab[2] = get_next_line(fd, retour);
-	retour[4] = NULL;
+	retour[1] = NULL;
 	i = 0;
 	while (tab[i])
 	{
