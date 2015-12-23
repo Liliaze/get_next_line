@@ -1,10 +1,4 @@
-1/ first ligne /11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111112
-2/ la ligne avant ligne vide /2
+012345678901234567890123456789
+0123456789|
 
-3/Ce matin un lapin /3
-4- a tue un chasseur
-5- il courait dans les hautes herbes
-6- mais il s'est fait rattrape par get_next_line;
-
-7/ ligne apres ligne vide /7
-end/ last ligne /end
+/ la ligne avant ligne vide /2
