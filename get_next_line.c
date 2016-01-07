@@ -5,91 +5,109 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dboudy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/23 12:57:31 by dboudy            #+#    #+#             */
-/*   Updated: 2015/12/23 19:33:21 by dboudy           ###   ########.fr       */
+/*   Created: 2016/01/04 12:40:08 by dboudy            #+#    #+#             */
+/*   Updated: 2016/01/07 14:47:00 by dboudy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "./libft/libft.h"
+#include "./get_next_line.h"
 
-int		ft_return_get(char *line, char *buf)
+static int		result(int etat)
 {
-	int	len;
-
-	len = ft_strlen(line);
-	printf("len de line cree = '%d'", len);
-	if (len > 0)
-		return (1);
-	else if (len == 0 && buf != NULL)
-		return (1);
-	else if (len == 0 && buf == NULL)
+	if (etat == 0)
 		return (0);
-	else
+	else if (etat < 0)
 		return (-1);
+	return (1);
 }
 
-char	*ft_realloc_get(char *new, int len)
+static char	*ft_read_buffer(int fd, char *buf)
 {
-	char	*tmp;
-	int 	i;
+	int		ret;
+	int		len;
+	char	*new;
 
-	i = 0;
-	if ((tmp = (char *)malloc(sizeof(char *) * (len + 1))) == NULL)
+	ret = 0;
+	len = 0;
+	if (buf != NULL)
+		len = ft_strlen(buf);
+	if ((new = (char *)malloc(sizeof(char *) * (BUFF_SIZE + len + 1))) == NULL)
 		return (NULL);
-	tmp[len] = '\0';
-	tmp = ft_strcpy(tmp, new);
-	if ((new = (char *)malloc(sizeof(char *) * (len + BUFF_SIZE + 1))) == NULL)
+	if (buf != NULL)
+		new = ft_strcpy(new, buf);
+	free(buf);
+	buf = NULL;
+	if ((ret = read(fd, new + len, BUFF_SIZE)) == -1)
 		return (NULL);
-	new[len + BUFF_SIZE] = '\0';
-	new = ft_strcpy(new, tmp);
-	free(tmp);
-	tmp = NULL;
+	new[ret + len] = '\0';
+	if (ret == 0 && len == 0)
+	{
+		free(new);
+		new = NULL;
+	}
 	return (new);
 }
 
-char	*ft_read_file(int fd, char *buf)
+static char	**copy_line(char **line, char *buf, char *n)
 {
-	int	ret;
-	int	len;
+	int	i;
 
-	len = 0;
-	ret = BUFF_SIZE;
-	if ((buf = (char *)malloc(sizeof(char *) * (len + 1))) == NULL)
-		return (NULL);
-	while (ret == BUFF_SIZE)
+	i = 0;
+	if (n == NULL)
+		return (line);
+	while (buf[i] != n[0])
 	{
-		buf = ft_realloc_get(buf, len);
-		if (buf == NULL)
-			return (buf);
-		len = ft_strlen(buf);
-		ret = read(fd, (buf + len), BUFF_SIZE);
-		buf[ret + len] = '\0';
+		line[0][i] = buf[i];
+		i++;
 	}
+	line[0][i] = '\0';
+	return (line);
+}
+
+static char	*save_new_buf(char *buf, char *n)
+{
+	int	i;
+	int i2;
+
+	i = 0;
+	i2 = 0;
+	while (buf[i] != n[0])
+		i++;
+	i++;
+	while (buf[i])
+	{
+		buf[i2] = buf[i];
+		i++;
+		i2++;
+
+	}
+	buf[i2] = buf[i];
 	return (buf);
 }
 
 int		get_next_line(int const fd, char **line)
 {
-	static char		*buf;
-	char			*i_end;
-	
-	if (buf == NULL)
+	static char		*buf[258];
+	char			*check_n;
+
+	if (fd < 0 || fd > 257)
+		return (-1);
+	while (check_n == NULL)
 	{
-		if ((buf = ft_read_file(fd, buf)) == NULL)
-			return (-1);
+		if (buf[fd] != NULL)
+			check_n = ft_strchr(buf[fd], '\n');
+		if (check_n != NULL)
+		{
+				line = copy_line(line, buf[fd], check_n);
+				buf[fd] = save_new_buf(buf[fd], check_n);
+		}
+		else if (buf[fd] == NULL || check_n == NULL)
+		{
+			if ((buf[fd] = ft_read_buffer(fd, buf[fd])) == NULL)
+				return (-1);
+		}
 	}
-	i_end = ft_strchr(buf, '\n');
-	if (i_end != NULL)
-	{
-		i_end[0] = '\0';
-		*line = ft_strcpy(*line, buf);
-		buf = i_end + 1;
-	}
-	else
-	{
-		*line = ft_strcpy(*line, buf);
-		buf = NULL;
-		free(buf);
-	}
-	return (ft_return_get(*line, buf));
+	check_n = NULL;
+	return (1);
 }
