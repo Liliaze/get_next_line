@@ -6,23 +6,17 @@
 /*   By: dboudy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 12:40:08 by dboudy            #+#    #+#             */
-/*   Updated: 2016/01/12 17:52:25 by dboudy           ###   ########.fr       */
+/*   Updated: 2016/01/14 13:42:14 by dboudy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft.h"
 
-void	str_free_and_null(char **str)
+static int	check_n(char **buf, char **line)
 {
-	free(*str);
-	*str = NULL;
-}
-
-int		check_n(char **buf, char **line)
-{
-	char *n;
-	char *new_buf;
+	char	*n;
+	char	*new_buf;
 
 	n = NULL;
 	new_buf = NULL;
@@ -39,14 +33,14 @@ int		check_n(char **buf, char **line)
 				*buf = new_buf;
 			}
 			else
-				str_free_and_null(buf);
+				ft_strdel(buf);
 			return (1);
 		}
 	}
 	return (0);
 }
 
-int		read_buff_size(int fd, char **buf, int *nb_c)
+static int	read_buff_size(int fd, char **buf, int *nb_c)
 {
 	char	*tmp;
 	char	*new_buf;
@@ -64,21 +58,21 @@ int		read_buff_size(int fd, char **buf, int *nb_c)
 	{
 		new_buf = ft_strjoin(*buf, tmp);
 		free(*buf);
-		free(tmp);
+		ft_strdel(&tmp);
 		*buf = new_buf;
 	}
 	else if (*nb_c)
 		*buf = tmp;
 	else
-		str_free_and_null(&tmp);
+		ft_strdel(&tmp);
 	return (1);
 }
 
-int		get_next_line(int const fd, char **line)
+int			get_next_line(int const fd, char **line)
 {
-	static char		*tab[258] = {0};
-	int				nb_c;
-	int				n;
+	static char	*tab[257] = {0};
+	int			nb_c;
+	int			n;
 
 	nb_c = 1;
 	n = 0;
@@ -93,8 +87,7 @@ int		get_next_line(int const fd, char **line)
 	{
 		if ((*line = ft_strdup(tab[fd])) == NULL)
 			return (-1);
-		free(tab[fd]);
-		tab[fd] = NULL;
+		ft_strdel(&tab[fd]);
 		return (1);
 	}
 	return (0);
