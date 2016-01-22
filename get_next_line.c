@@ -6,7 +6,7 @@
 /*   By: dboudy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 12:40:08 by dboudy            #+#    #+#             */
-/*   Updated: 2016/01/22 14:33:52 by dboudy           ###   ########.fr       */
+/*   Updated: 2016/01/22 15:24:46 by dboudy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int			get_next_line(int const fd, char **line)
 
 	nb_c = 1;
 	n = 0;
+	if (fd < 0 || fd > 256)
+		return (-1);
 	while (!(n = check_n(&tab[fd], line)) && nb_c)
 	{
 		if ((read_buff_size(fd, &tab[fd], &nb_c)) == -1)
