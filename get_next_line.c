@@ -6,12 +6,11 @@
 /*   By: dboudy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 12:40:08 by dboudy            #+#    #+#             */
-/*   Updated: 2016/01/14 13:42:14 by dboudy           ###   ########.fr       */
+/*   Updated: 2016/01/22 14:33:52 by dboudy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libft.h"
 
 static int	check_n(char **buf, char **line)
 {
